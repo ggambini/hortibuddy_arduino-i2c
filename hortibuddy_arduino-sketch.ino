@@ -17,10 +17,20 @@
     Wire.begin(I2C_ADDRESS);
     
     // Fonctions de callback pour l'I2C
-    Wire.onReceive(receiveEvent);
-    Wire.onRequest(requestEvent);
+    Wire.onReceive(getData);
+    Wire.onRequest(sendData);
   }
 
+//
+// Fonctions
+// 
+  void getData(int nb_octets) {
+    
+  }
+  
+  void sendData() {
+    
+  }
 
 //
 // Traitement
