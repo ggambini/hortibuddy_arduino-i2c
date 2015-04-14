@@ -10,6 +10,13 @@ There are two kind of communication :
 * A command to process with parameters : Using onReceive event from Wire lib.
 * A value to get : Using onRequest event from Wire lib.
 
+Command fonction take 3 bytes has a parameters :
+* First byte is command id.
+* Second byte is PIN id.
+* Third byte is value to apply, optional.
+
+We need to normalize command id and PIN id
+
 ### French documentation
 * Project overview : http://blog.gamb.fr/index.php?post/2014/03/10/Horti-Buddy-episode1
 * Installing OS on RPi : http://blog.gamb.fr/index.php?post/2014/05/03/Raspberry-PI-%3A-Installation-du-syst%C3%A8me
