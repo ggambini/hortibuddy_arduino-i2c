@@ -1,4 +1,7 @@
 # hortibuddy_arduino-sketch
+
+## Introduction
+
 Arduino sketch from Horti'Buddy project. This script setup a slave I2C communication and pilot some peripherals like temp probe or motor dimmer.
 
 
