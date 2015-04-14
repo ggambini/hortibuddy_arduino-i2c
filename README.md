@@ -2,9 +2,13 @@
 
 ### Introduction
 
-Arduino sketch from Horti'Buddy project. This script setup a slave I2C communication and pilot some peripherals like temp probe or motor dimmer. There are 2 steps in operation betwen Rpi and Arduino. First, RPi sent a command order with parameters, Arduino compute that and save result into a variable. After a short delay, RPi get the result.
+Arduino sketch from Horti'Buddy project. This script setup a slave I2C communication and pilot some peripherals like temp probe or motor dimmer. There are 2 steps in operation betwen Raspberry Pi and Arduino. First, RPi sent a command order with parameters, Arduino compute that and save result into a variable. After a short delay, RPi get the result.
 
 ### Horti'Buddy protocol specs 
+
+There are two kind of communication :
+* A command to process with parameters : Using onReceive event from Wire lib.
+* A value to get : Using onRequest event from Wire lib.
 
 ### French documentation
 * Project overview : http://blog.gamb.fr/index.php?post/2014/03/10/Horti-Buddy-episode1
