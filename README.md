@@ -2,9 +2,9 @@
 
 ## Introduction
 
-Arduino sketch from Horti'Buddy project. This script setup a slave I2C communication and pilot some peripherals like temp probe or motor dimmer.
+Arduino sketch from Horti'Buddy project. This script setup a slave I2C communication and pilot some peripherals like temp probe or motor dimmer. 
 
-
+## Horti'Buddy protocol specs 
 
 ## Documentation FR
 * Project overview : http://blog.gamb.fr/index.php?post/2014/03/10/Horti-Buddy-episode1
