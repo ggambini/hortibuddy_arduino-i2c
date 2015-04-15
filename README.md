@@ -17,7 +17,7 @@ Command fonction take 3 bytes has a parameters :
 
 We need to normalize command id and PIN id
 
-### French documentation
+### About Horti'Buddy project
 * Project overview : http://blog.gamb.fr/index.php?post/2014/03/10/Horti-Buddy-episode1
 * Installing OS on RPi : http://blog.gamb.fr/index.php?post/2014/05/03/Raspberry-PI-%3A-Installation-du-syst%C3%A8me
 
