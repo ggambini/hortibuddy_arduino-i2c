@@ -8,10 +8,6 @@
 //
 // OnRequest renvoie simplement le contenu de la variable result et la reinit
 //
-// Liste des commandes :
-// 0x00 : NoCommand
-// 0x01 : Lecture temperature digitale
-// 0x02 : Lecture hygro digitale
 
 // Libs necessaires
 #include <Wire.h>
@@ -22,8 +18,16 @@
 //
   // I2C address
   #define I2C_ADDRESS 0x03
-  volatile byte command = 0;
-  volatile byte result = 0;
+  
+  // COMMAND ID - 0x00 reserved / 0xFF disabled command
+  #define TEMP_DHT22 0x01
+  #define HYGRO_DHT22 0x02
+
+  // GLOBAL VAR  
+  volatile byte commandId;
+  volatile byte pinId;
+  volatile byte pinValue;
+  volatile byte result;
 
 //
 // Init
@@ -40,23 +44,48 @@
 //
 // Fonctions
 // 
+
+  // PROBES
+    // Temperature sonde DHT22
+    void getTempDht22() {
+      result = (byte)(digitalRead(pinId));
+    }
+
   // OnReceive
   // Execute une fonction qui stockera le resultat dans result
-  void getCommand(int nb_octets) {
-    
+  void getCommand(int nbOctets) {
+    // On accepte que les commandes de 3 octets
+    if (nbOctets == 3) {
+      commandId = Wire.read();
+      pinId = Wire.read();
+      pinValue = Wire.read();
+    } else {
+      commandId = 0x00;
+      pinId = 0x00;
+      pinValue = 0x00;
+    }
   }
   
   // OnRequest
   // Envoi le contenu de result, donc de la derniere commande executee
   void sendResult() {
-    
+    Wire.write(result);
   }
 
 //
 // Traitement
 //
   void loop() {
- 
+
+    // commandId
+    switch(commandId) {
+     
+     // Temp - Sonde DHT22
+     case TEMP_DHT22 :
+       getTempDht22();
+       break;
+  
+    }
+  }
   
 
-  }
