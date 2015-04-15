@@ -1,4 +1,4 @@
-# hortibuddy_arduino-sketch
+# hortibuddy_arduino-i2c
 
 ### Introduction
 
