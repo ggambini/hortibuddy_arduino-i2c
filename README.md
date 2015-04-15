@@ -15,7 +15,7 @@ Command fonction take 3 bytes has a parameters :
 * Second byte is PIN id.
 * Third byte is value to apply, optional.
 
-We need to normalize command id and PIN id
+We need to normalize commandId and pinId on RPi side and Arduino side. 
 
 ### About Horti'Buddy project
 * Project overview : http://blog.gamb.fr/index.php?post/2014/03/10/Horti-Buddy-episode1
