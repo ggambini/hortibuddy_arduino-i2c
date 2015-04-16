@@ -26,4 +26,4 @@ We need to normalize commandId and pinId on RPi side and Arduino side.
 |:---------------------|:-----------------------------------------|
 | **Author:**          | Gilian Gambini (<gamb@gamb.fr>)
 | **Copyright:**       | Gamb
-| **License:**         | AGPL v3, see the COPYING file.
+| **License:**         | AGPL v3, see the LICENSE file.
