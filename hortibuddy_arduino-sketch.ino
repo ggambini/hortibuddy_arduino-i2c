@@ -18,15 +18,18 @@
 //
   // I2C address
   #define I2C_ADDRESS 0x03
-  
-  // COMMAND ID - 0x00 reserved / 0xFF disabled command
-  #define TEMP_DHT22 0x01
-  #define HYGRO_DHT22 0x02
 
-  // GLOBAL VAR  
+  // OPERATION REG  
   volatile byte commandId;
   volatile byte pinId;
   volatile byte pinValue;
+  
+  // COMMAND ID - 0x00 reserved / 0xFF disabled command
+  #define TEST_INPUT 0x01
+  #define TEMP_DHT22 0x02
+  #define HYGRO_DHT22 0x03
+  
+  //
   volatile byte result;
 
 //
@@ -50,26 +53,33 @@
     void getTempDht22() {
       result = (byte)(digitalRead(pinId));
     }
+    
+  // TEST
+    // Test function
+    void getTestInput() {
+      result = pinId;  
+    }
 
   // OnReceive
   // Execute une fonction qui stockera le resultat dans result
   void getCommand(int nbOctets) {
     // On accepte que les commandes de 3 octets
-    if (nbOctets == 3) {
+    //if (nbOctets == 3) {
       commandId = Wire.read();
       pinId = Wire.read();
       pinValue = Wire.read();
-    } else {
-      commandId = 0x00;
-      pinId = 0x00;
-      pinValue = 0x00;
-    }
+    //} else {
+      //commandId = 0x00;
+      //pinId = 0x00;
+      //pinValue = 0x00;
+    //}
   }
   
   // OnRequest
   // Envoi le contenu de result, donc de la derniere commande executee
   void sendResult() {
     Wire.write(result);
+    result = 0x00;
   }
 
 //
@@ -79,13 +89,20 @@
 
     // commandId
     switch(commandId) {
-     
+
+     // Test case
+     case TEST_INPUT :
+       getTestInput();
+       break;
+      
      // Temp - Sonde DHT22
      case TEMP_DHT22 :
        getTempDht22();
        break;
   
     }
+    delay(100);
   }
   
+
 
