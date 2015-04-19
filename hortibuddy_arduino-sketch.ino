@@ -1,13 +1,16 @@
 //              Horti'Buddy - Arduino-sketch
 // 
-// Chaque operation est l'enchainement d'une ecriture suivit d'une lecture
-// Donc en terme Arduino, un event onReceive puis un event onRequest
+// Le RPi communique avec l'Arduino avec deux events : OnReceive et OnRequest. 
+// Avec le premier, on définit un parametre. 
+// Le second execute une operation en fonction des parametres.
 //
-// OnReceive va declencher une commande "octet1" sur la PIN "octet2" avec la valeur facultative "octet3"
-// puis stocker le resultat dans la variable "result"
+// GetParameter recoit deux octets : une cle et une valeur.
+// Stock la valeur dans le parametre corespondant a la cle
 //
-// OnRequest renvoie simplement le contenu de la variable result et la reinit
-//
+// ExecCommand lance une fonction correspondante a commandId avec comme 
+// parametre pinId et pinValue. Le resultat de la fonction est ensuite ecrit
+// sur le bus I2C
+// 
 
 // Libs necessaires
 #include <Wire.h>
@@ -23,15 +26,11 @@
   volatile byte commandId;
   volatile byte pinId;
   volatile byte pinValue;
-  
-  // COMMAND ID - 0x00 reserved / 0xFF disabled command
-  #define TEST_INPUT 0x01
-  #define TEMP_DHT22 0x02
-  #define HYGRO_DHT22 0x03
-  
-  //
+  volatile byte paramId;
+  volatile byte paramData;
   volatile byte result;
-
+  
+ 
 //
 // Init
 //
@@ -40,8 +39,8 @@
     Wire.begin(I2C_ADDRESS);
     
     // Fonctions de callback pour l'I2C
-    Wire.onReceive(getCommand);
-    Wire.onRequest(sendResult);
+    Wire.onReceive(getParameter);
+    Wire.onRequest(execCommand);
   }
 
 //
@@ -56,53 +55,58 @@
     
   // TEST
     // Test function
-    void getTestInput() {
+    void getPinId() {
       result = pinId;  
     }
+    void getPinValue() {
+      result = pinValue;
+    }
 
-  // OnReceive
-  // Execute une fonction qui stockera le resultat dans result
-  void getCommand(int nbOctets) {
-    // On accepte que les commandes de 3 octets
-    //if (nbOctets == 3) {
-      commandId = Wire.read();
-      pinId = Wire.read();
-      pinValue = Wire.read();
-    //} else {
-      //commandId = 0x00;
-      //pinId = 0x00;
-      //pinValue = 0x00;
-    //}
+//
+// Core
+//
+
+  // GetParameter - OnReceive
+  // Stock octet2 dans var d'index octet1
+  void getParameter(int nbOctets) {
+
+    // Lecture - Octet1=Id, Octet2=data
+    paramId = Wire.read();
+    paramData = Wire.read(); 
+    
+    if (paramId == 0x01) {
+      // Set commandId
+      commandId = paramData; 
+    }else if (paramId == 0x02) {
+      pinId = paramData;
+    }else if (paramId == 0x03) {
+      pinValue = paramData;
+    }
+    
   }
   
-  // OnRequest
-  // Envoi le contenu de result, donc de la derniere commande executee
-  void sendResult() {
+  // ExecCommand - OnRequest
+  // Execute la fonction de nom commandId, renvoi le resultat
+  void execCommand() {
+
+    switch (commandId) {
+      case 0x01 :
+        getPinId();
+        break;   
+      case 0x02 :
+        getPinValue();
+        break;
+    }
+
     Wire.write(result);
     result = 0x00;
   }
 
-//
-// Traitement
-//
+  // Loop
   void loop() {
 
-    // commandId
-    switch(commandId) {
-
-     // Test case
-     case TEST_INPUT :
-       getTestInput();
-       break;
-      
-     // Temp - Sonde DHT22
-     case TEMP_DHT22 :
-       getTempDht22();
-       break;
-  
-    }
     delay(100);
+
   }
   
-
 
