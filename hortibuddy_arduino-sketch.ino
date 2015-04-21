@@ -14,7 +14,7 @@
 
 // Libs necessaires
 #include <Wire.h>
-//include <DHT22.h>
+#include <DHT.h>
 
 //
 // Conf
@@ -23,14 +23,17 @@
   #define I2C_ADDRESS 0x03
 
   // OPERATION REG  
-  volatile byte commandId;
-  volatile byte pinId;
-  volatile byte pinValue;
-  volatile byte paramId;
-  volatile byte paramData;
-  volatile byte result;
+  byte commandId;
+  int pinId;
+  byte pinValue;
+  byte paramId;
+  byte paramData;
+  int result;
   
- 
+  //#define DHTPIN 2
+  //#define DHTTYPE DHT22
+
+  
 //
 // Init
 //
@@ -41,6 +44,9 @@
     // Fonctions de callback pour l'I2C
     Wire.onReceive(getParameter);
     Wire.onRequest(execCommand);
+    
+    pinMode(13, OUTPUT);
+    digitalWrite(13, HIGH);
   }
 
 //
@@ -50,7 +56,20 @@
   // PROBES
     // Temperature sonde DHT22
     void getTempDht22() {
-      result = (byte)(digitalRead(pinId));
+      // On crée l'objet dht avec pinId et dht22 comme type
+      //DHT dht(pinId, DHT22);
+      DHT dht(pinId, DHT22);
+      // Open communication
+      dht.begin();
+      // On lit la temperature en celsius
+      float temp = dht.readTemperature();
+      result = (int) temp;
+      //dht.end();
+    }
+    
+    void getLightModule() {
+      pinMode(pinId, INPUT);
+      result = digitalRead(pinId);
     }
     
   // TEST
@@ -78,8 +97,10 @@
       // Set commandId
       commandId = paramData; 
     }else if (paramId == 0x02) {
+      // Set pinId
       pinId = paramData;
     }else if (paramId == 0x03) {
+      // Set pinValue
       pinValue = paramData;
     }
     
@@ -95,6 +116,15 @@
         break;   
       case 0x02 :
         getPinValue();
+        break;
+      case 0x03 :
+        getTempDht22();
+        break;
+      case 0x04 :
+        //getHumiDht22
+        break;
+      case 0x05 :
+        getLightModule();
         break;
     }
 
