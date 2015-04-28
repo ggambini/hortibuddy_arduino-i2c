@@ -17,6 +17,10 @@ There are 3 parameters available on Arduino side :
 
 We need to normalize commandId and pinId on RPi side and Arduino side. 
 
+### Usage
+
+On Raspberry side, 
+
 ### About Horti'Buddy project
 * Project overview : http://blog.gamb.fr/index.php?post/2014/03/10/Horti-Buddy-episode1
 * Installing OS on RPi : http://blog.gamb.fr/index.php?post/2014/05/03/Raspberry-PI-%3A-Installation-du-syst%C3%A8me
