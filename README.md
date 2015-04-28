@@ -4,16 +4,16 @@
 
 Arduino sketch from Horti'Buddy project. This script setup a slave I2C communication and pilot some peripherals like temp probe or motor dimmer. There are 2 steps in operation between Raspberry Pi and Arduino. First, RPi sent a command order with parameters, Arduino compute that and save result into a variable. After a short delay, RPi get the result.
 
-### Horti'Buddy protocol specs 
+### Horti'Buddy communication specs 
 
-There are two kind of communication :
-* A command to process with parameters : Using onReceive event from Wire lib.
-* A value to get : Using onRequest event from Wire lib.
+There are two communication methods :
+* Set one parameter : Using onReceive event from Wire lib.
+* Execute a command : Using onRequest event from Wire lib.
 
-Command fonction take 3 bytes has a parameters :
-* First byte is command id.
-* Second byte is PIN id.
-* Third byte is value to apply, optional.
+There are 3 parameters available on Arduino side :
+* Parameter commandId with key 0x01.
+* Parameter pinId with key 0x02.
+* Parameter pinValue with key 0x03.
 
 We need to normalize commandId and pinId on RPi side and Arduino side. 
 
